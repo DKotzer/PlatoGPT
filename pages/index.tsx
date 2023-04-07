@@ -2,12 +2,7 @@ import { Answer } from "@/components/Answer/Answer";
 import { Footer } from "@/components/Footer";
 import { Navbar } from "@/components/Navbar";
 import { PGChunk } from "@/types";
-import {
-  IconArrowRight,
-  IconExternalLink,
-  IconSearch,
-  IconSend,
-} from "@tabler/icons-react";
+import { IconExternalLink, IconSearch, IconSend } from "@tabler/icons-react";
 import endent from "endent";
 import Head from "next/head";
 import { KeyboardEvent, useEffect, useRef, useState } from "react";
@@ -216,14 +211,14 @@ export default function Home() {
 
                 <input
                   ref={inputRef}
-                  className='h-12 w-full rounded-full border border-zinc-600 pr-12 pl-11 focus:border-zinc-800 focus:outline-none focus:ring-1 focus:ring-zinc-800 sm:h-16 sm:py-2 sm:pr-16 sm:pl-16 sm:text-lg'
+                  className='h-12 w-full rounded-3xl border border-zinc-600 pr-12 pl-11 focus:border-zinc-800 focus:outline-none focus:ring-1 focus:ring-zinc-800 sm:h-16 sm:py-2 sm:pr-16 sm:pl-16 sm:text-lg'
                   type='text'
                   placeholder={
                     placeholder !== ""
                       ? placeholder
                       : mode === "chat"
                       ? `Start a dialogue with Plato and Socrates`
-                      : `Search ${title}'s content`
+                      : `Search Platos Complete Works for relevant passages`
                   }
                   value={query}
                   onChange={(e) => setQuery(e.target.value)}
@@ -233,8 +228,10 @@ export default function Home() {
                 <button
                   disabled={query === ""}
                   className={`${
-                    query === "" ? "opacity-50 cursor-no-drop" : "opacity-100"
-                  }`}
+                    query === ""
+                      ? "opacity-0 cursor-no-drop transition-opacity duration-500 ease-in-out"
+                      : "opacity-100 transition-opacity duration-500 ease-in-out"
+                  } `}
                 >
                   <IconSend
                     onClick={mode === "search" ? handleSearch : handleAnswer}
@@ -358,7 +355,7 @@ export default function Home() {
                 ))}
               </div>
             ) : (
-              <div className='mt-6 text-center text-lg'>{`Use AI to explore the wisdom of ${title}.`}</div>
+              <div className='mt-6 mb-[50px] text-center text-lg'>{`Use AI to explore the wisdom of ${title}.`}</div>
             )}
           </div>
         </div>
