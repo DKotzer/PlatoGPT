@@ -36,7 +36,7 @@ export const OpenAIStream = async (prompt: string, apiKey: string) => {
           role: "user",
           content:
             prompt +
-            "You will answer in the form of a short dialgoue between yourself, Socrates, and the User, using the Socratic Method. The dialogue should explore the question provided by the user with the user acting as Socrates , using the text provided in the passages as inspiration. Socrates and Plato should try to find out more about the other person's understanding of the topics i the question. The dialogue should be insightful, philosophical, intelligent, and give lots of details and context.",
+            "You will answer in the form of a short dialogue between yourself, Socrates, and the User, using the Socratic Method. The dialogue should explore the question provided by the user with the user acting as Socrates , using the text provided in the passages as inspiration. Socrates and Plato should try to find out more about the other person's understanding of the topics i the question. The dialogue should be insightful, philosophical, intelligent, and give lots of details and context.",
         },
       ],
       max_tokens: 1000,

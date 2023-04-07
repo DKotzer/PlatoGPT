@@ -15,6 +15,7 @@ const getLinks = async () => {
   $(".newBook").each((i, bookElement) => {
     const $bookElement = $(bookElement);
     const title = $bookElement.find(".bookTitle").text().trim();
+    console.log(title, "title");
 
     const text = $bookElement
       .clone()
@@ -62,6 +63,7 @@ const getLinks = async () => {
     // console.log(book, "book:", title);
     books.push(book);
   });
+  console.log(books.length, "books.length");
 
   return books;
 };
@@ -226,6 +228,7 @@ const chunkEssay = async (essay: PGEssay) => {
     const chunkedEssay = await chunkEssay(essay);
     essays.push(chunkedEssay);
   }
+  console.log(essays.length, "essays.length");
   const json: PGJSON = {
     current_date: "2023-03-31",
     author: "Plato",
