@@ -196,6 +196,12 @@ export default function Home() {
           content={`Use AI to explore the wisdom of ${title}`}
         />
         <meta name='viewport' content='width=device-width, initial-scale=1' />
+        <meta property='og:title' content='PlatoAI' />
+        <meta
+          property='og:description'
+          content='Generate a dialogue between yourself, Socrates and Plato.'
+        />
+        <meta property='og:image' content='/plato.png' />
         <link rel='icon' href={process.env.NEXT_PUBLIC_IMAGE} />
       </Head>
 
