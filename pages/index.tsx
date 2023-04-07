@@ -201,7 +201,7 @@ export default function Home() {
           property='og:description'
           content='Generate a dialogue between yourself, Socrates and Plato.'
         />
-        <meta property='og:image' content='/plato.png' />
+        <meta property='og:image' content={process.env.NEXT_PUBLIC_IMAGE}/>
         <link rel='icon' href={process.env.NEXT_PUBLIC_IMAGE} />
       </Head>
 
