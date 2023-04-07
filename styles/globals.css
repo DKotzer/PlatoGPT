@@ -3,7 +3,7 @@
 @tailwind utilities;
 
 :root {
-  --primary-color: #8d1248;
+  --primary-color: #d5793c;
   --background-color: #c4dadb;
   --navbar-color: white;
   --footer-color: white;
@@ -45,13 +45,28 @@
 
 .chatButton {
   color: var(--primary-color);
-  background-color: var(--background-color);
+  background-color: var(--navbar-color);
 }
 
 .navLogo {
   color: var(--primary-color);
 }
-/* #f1dede */
+
+.scrollDiv::-webkit-scrollbar {
+  width: 5px; /* Mostly for vertical scrollbars */
+  height: 10px; /* Mostly for horizontal scrollbars */
+  border-radius: 20px;
+}
+.scrollDiv::-webkit-scrollbar-thumb {
+  border-radius: 20px;
+  /* Foreground */
+  background: var(--primary-color);
+}
+.scrollDiv::-webkit-scrollbar-track {
+  /* Background */
+  border-radius: 20px;
+  background: var(--background-color);
+}
 
 .Plato {
   color: blue;

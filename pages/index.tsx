@@ -6,6 +6,7 @@ import {
   IconArrowRight,
   IconExternalLink,
   IconSearch,
+  IconSend,
 } from "@tabler/icons-react";
 import endent from "endent";
 import Head from "next/head";
@@ -201,15 +202,15 @@ export default function Home() {
           property='og:description'
           content='Generate a dialogue between yourself, Socrates and Plato.'
         />
-        <meta property='og:image' content={process.env.NEXT_PUBLIC_IMAGE}/>
+        <meta property='og:image' content={process.env.NEXT_PUBLIC_IMAGE} />
         <link rel='icon' href={process.env.NEXT_PUBLIC_IMAGE} />
       </Head>
 
       <div className={`flex flex-col h-screen w-screen backgroundColor`}>
         <Navbar mode={mode} setMode={setMode} />
-        <div className='flex-1 overflow-auto w-full'>
+        <div className='flex-1 overflow-auto w-full scrollDiv'>
           {answer === "" && <img src={image} className='mx-auto mt-6 '></img>}
-          <div className='mx-auto flex h-full w-full  max-w-[750px] flex-col items-center px-3 '>
+          <div className='mx-auto flex w-full  max-w-[750px] flex-col items-center px-3 '>
             {true && <div className='w-full sm:w-[355px]'></div>}
 
             {true === true ? (
@@ -238,9 +239,9 @@ export default function Home() {
                     query === "" ? "opacity-50 cursor-no-drop" : "opacity-100"
                   }`}
                 >
-                  <IconArrowRight
+                  <IconSend
                     onClick={mode === "search" ? handleSearch : handleAnswer}
-                    className={` absolute chatButton right-2 top-2.5 h-7 w-7 rounded-full buttonColor p-1  sm:right-3 sm:top-3 sm:h-10 sm:w-10 text-white `}
+                    className={` absolute chatButton right-2 top-2.5 h-7 w-7 rounded-full buttonColor p-1.5  sm:right-3 sm:top-3 sm:h-9 sm:w-9 text-white `}
                   />
                 </button>
               </div>
@@ -251,7 +252,7 @@ export default function Home() {
             )}
 
             {loading ? (
-              <div className='mt-6 w-full'>
+              <div className='mt-6 w-full mb-10'>
                 {mode === "chat" && (
                   <>
                     <div className='font-bold text-2xl'>Answer</div>
