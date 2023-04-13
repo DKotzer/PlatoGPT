@@ -38,7 +38,7 @@ export const Navbar: FC<NavbarProps> = ({ mode, setMode }) => {
           }   font-bold text-2xl rounded-md py-2 px-4   hover:cursor-pointer`}
           onClick={() => setMode("search")}
         >
-          Search
+          Ask
         </div>
       </div>
       <div>

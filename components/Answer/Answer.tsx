@@ -14,7 +14,7 @@ export const Answer: React.FC<AnswerProps> = ({ text }) => {
 
   const shouldBreak = (word: string): boolean => {
     const filter = ["User:", "Plato:", "Socrates:"];
-    return filter.includes(word);
+    return filter.includes(word) || word.includes("\n");
   };
 
   return (

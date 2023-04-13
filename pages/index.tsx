@@ -150,12 +150,83 @@ export default function Home() {
     inputRef.current?.focus();
   };
 
+  const handleDialogue = async () => {
+    if (!query) {
+      alert("Please enter a query.");
+      return;
+    }
+
+    setAnswer("");
+    setChunks([]);
+
+    setLoading(true);
+    setPlaceholder(query);
+
+    const searchResponse = await fetch("/api/search", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ query, matches: matchCount }),
+    });
+
+    if (!searchResponse.ok) {
+      setLoading(false);
+      throw new Error(searchResponse.statusText);
+    }
+
+    const results: PGChunk[] = await searchResponse.json();
+
+    setChunks(results);
+
+    const prompt = endent`
+    Find passages relevant to the query and use them to respond to this question: "${query}."
+
+    ${results?.map((d: any) => d.content).join("\n\n")}
+    `;
+
+    const answerResponse = await fetch("/api/answer", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ prompt, mode }),
+    });
+
+    if (!answerResponse.ok) {
+      setLoading(false);
+      throw new Error(answerResponse.statusText);
+    }
+
+    const data = answerResponse.body;
+
+    if (!data) {
+      return;
+    }
+
+    setLoading(false);
+    setQuery("");
+
+    const reader = data.getReader();
+    const decoder = new TextDecoder();
+    let done = false;
+
+    while (!done) {
+      const { value, done: doneReading } = await reader.read();
+      done = doneReading;
+      const chunkValue = decoder.decode(value);
+      setAnswer((prev) => prev + chunkValue);
+    }
+
+    inputRef.current?.focus();
+  };
+
   const handleKeyDown = (e: KeyboardEvent<HTMLInputElement>) => {
     if (e.key === "Enter") {
       if (mode === "search") {
-        handleSearch();
+        handleDialogue();
       } else {
-        handleAnswer();
+        handleDialogue();
       }
     }
   };
@@ -234,7 +305,9 @@ export default function Home() {
                   } `}
                 >
                   <IconSend
-                    onClick={mode === "search" ? handleSearch : handleAnswer}
+                    onClick={
+                      mode === "search" ? handleDialogue : handleDialogue
+                    }
                     className={` absolute chatButton right-2 top-2.5 h-7 w-7 rounded-full buttonColor p-1.5  sm:right-3 sm:top-3 sm:h-9 sm:w-9 text-white `}
                   />
                 </button>
