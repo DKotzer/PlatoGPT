@@ -9,6 +9,9 @@ import { KeyboardEvent, useEffect, useRef, useState } from "react";
 
 export default function Home() {
   const inputRef = useRef<HTMLInputElement>(null);
+  type ExpandedChunks = { [key: number]: boolean };
+
+  const [expandedChunks, setExpandedChunks] = useState<ExpandedChunks>({});
 
   const [query, setQuery] = useState<string>("");
   const [chunks, setChunks] = useState<PGChunk[]>([]);
@@ -148,6 +151,13 @@ export default function Home() {
     }
 
     inputRef.current?.focus();
+  };
+
+  const handleExpand = (index: number) => {
+    setExpandedChunks((prevState) => ({
+      ...prevState,
+      [index]: !prevState[index],
+    }));
   };
 
   const handleDialogue = async () => {
@@ -308,7 +318,7 @@ export default function Home() {
                     onClick={
                       mode === "search" ? handleDialogue : handleDialogue
                     }
-                    className={` absolute chatButton right-2 top-2.5 h-7 w-7 rounded-full buttonColor p-1.5  sm:right-3 sm:top-3 sm:h-9 sm:w-9 text-white `}
+                    className={` absolute chatButton right-2 top-2.5 h-7 w-7 rounded-full p-1.5  sm:right-3 sm:top-3 sm:h-9 sm:w-9 text-white `}
                   />
                 </button>
               </div>
@@ -344,17 +354,18 @@ export default function Home() {
               </div>
             ) : answer ? (
               <div className='mt-6'>
-                <div className='bg-white p-5 border border-black rounded-xl min-h-[200px]'>
+                <div className='bg-white p-5 border border-black rounded-xl min-h-[200px] chunkCard'>
                   <div className='font-bold text-2xl mb-[-6]'>Answer</div>
                   <Answer text={answer} />
                 </div>
                 <div className='mt-6 mb-16'>
                   <div className='font-bold text-2xl'>Passages</div>
-
                   {chunks.map((chunk, index) => (
                     <div key={index}>
-                      <div className='mt-4 border bg-white border-zinc-600 rounded-lg p-5 '>
-                        <div className='flex justify-between'>
+                      <div
+                        className={`mt-4 border bg-white  rounded-lg p-5  hover:cursor-pointer chunkCard  `}
+                      >
+                        <div className='flex justify-between items-start'>
                           <div>
                             <div className='font-bold text-xl'>
                               {chunk.essay_title}
@@ -366,7 +377,7 @@ export default function Home() {
                           <div className='topRight relative top-0 right-0'>
                             <div className=' float-right'>
                               <a
-                                className='hover:opacity-50'
+                                className='hover:opacity-50 '
                                 href={chunk.essay_url}
                                 target='_blank'
                                 rel='noreferrer'
@@ -380,8 +391,14 @@ export default function Home() {
                             </div>
                           </div>
                         </div>
-                        <div className='mt-2 w-[98%] mx-auto'>
-                          {chunk.content}
+                        <div
+                          className='mt-2 w-[98%] mx-auto'
+                          onClick={() => handleExpand(index)}
+                        >
+                          {expandedChunks[index]
+                            ? chunk.content
+                            : chunk.content.slice(0, 200) +
+                              (chunk.content.length > 200 ? "..." : "")}
                         </div>
                       </div>
                     </div>
@@ -393,7 +410,9 @@ export default function Home() {
                 <div className='font-bold text-2xl'>Passages</div>
                 {chunks.map((chunk, index) => (
                   <div key={index}>
-                    <div className='mt-4 border bg-white border-zinc-600 rounded-lg p-5'>
+                    <div
+                      className={`mt-4 border bg-white  rounded-lg p-5  hover:cursor-pointer chunkCard  `}
+                    >
                       <div className='flex justify-between items-start'>
                         <div>
                           <div className='font-bold text-xl'>
@@ -420,8 +439,14 @@ export default function Home() {
                           </div>
                         </div>
                       </div>
-                      <div className='mt-2 w-[98%] mx-auto'>
-                        {chunk.content}
+                      <div
+                        className='mt-2 w-[98%] mx-auto'
+                        onClick={() => handleExpand(index)}
+                      >
+                        {expandedChunks[index]
+                          ? chunk.content
+                          : chunk.content.slice(0, 200) +
+                            (chunk.content.length > 200 ? "..." : "")}
                       </div>
                     </div>
                   </div>
