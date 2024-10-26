@@ -1,5 +1,6 @@
 import { FC } from "react";
 import { IconExternalLink } from "@tabler/icons-react";
+import Link from "next/link";
 
 interface NavbarProps {
   mode: "search" | "chat";
@@ -15,9 +16,9 @@ export const Navbar: FC<NavbarProps> = ({ mode, setMode }) => {
       className={`flex h-[60px] border-b border-gray-300 py-2 px-8 items-center justify-between navbarColor`}
     >
       <div className='font-bold text-2xl flex items-center cursor-default'>
-        <a className='hover:opacity-50 navLogo' href='/'>
+        <Link className='hover:opacity-50 navLogo' href='/'>
           {name}AI
-        </a>
+        </Link>
       </div>
       <div className='flex items-center'>
         <div
