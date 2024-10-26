@@ -58,4 +58,30 @@ using ivfflat (embedding vector_cosine_ops)
 with (lists = 100);
 
 
+
+
+
 -- //for blogs scraping, after running the scraper , find all <content":"Anne Hussain> (remove arrow brackets)  and replace with content:"" , then do the same for content":"Anne
+
+-- Create a table to store the history of questions and answers
+create table qa_history (
+  id bigserial primary key,
+  question text not null,
+  answer text not null,
+  created_at timestamp with time zone default current_timestamp
+);
+
+-- Create a function to insert a new question and answer into the qa_history table
+create or replace function insert_qa_history (
+  p_question text,
+  p_answer text
+)
+returns void
+language plpgsql
+as $$
+begin
+  insert into qa_history (question, answer)
+  values (p_question, p_answer);
+end;
+$$;
+
