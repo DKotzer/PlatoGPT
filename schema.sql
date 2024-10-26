@@ -1,8 +1,8 @@
 --  RUN 1st
 create extension vector;
 
--- RUN 2nd
-create table pg (
+-- RUN 2nd - changed everything to pg2 to not conflict with pg
+create table pg2 (
   id bigserial primary key,
   essay_title text,
   essay_url text,
@@ -15,7 +15,7 @@ create table pg (
 );
 
 -- RUN 3rd after running the scripts
-create or replace function pg_search (
+create or replace function pg2_search (
   query_embedding vector(1536),
   similarity_threshold float,
   match_count int
@@ -36,24 +36,24 @@ as $$
 begin
   return query
   select
-    pg.id,
-    pg.essay_title,
-    pg.essay_url,
-    pg.essay_date,
-    pg.essay_category,
-    pg.content,
-    pg.content_length,
-    pg.content_tokens,
-    1 - (pg.embedding <=> query_embedding) as similarity
-  from pg
-  where 1 - (pg.embedding <=> query_embedding) > similarity_threshold
-  order by pg.embedding <=> query_embedding
+    pg2.id,
+    pg2.essay_title,
+    pg2.essay_url,
+    pg2.essay_date,
+    pg2.essay_category,
+    pg2.content,
+    pg2.content_length,
+    pg2.content_tokens,
+    1 - (pg2.embedding <=> query_embedding) as similarity
+  from pg2
+  where 1 - (pg2.embedding <=> query_embedding) > similarity_threshold
+  order by pg2.embedding <=> query_embedding
   limit match_count;
 end;
 $$;
 
 -- RUN 4th
-create index on pg 
+create index on pg2 
 using ivfflat (embedding vector_cosine_ops)
 with (lists = 100);
 

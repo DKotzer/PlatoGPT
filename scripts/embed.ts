@@ -1,27 +1,32 @@
-import { PGEssay, PGJSON } from "@/types";
-import { loadEnvConfig } from "@next/env";
-import { createClient } from "@supabase/supabase-js";
-import fs from "fs";
-import { Configuration, OpenAIApi } from "openai";
+import { PGEssay, PGJSON } from "@/types"
+import { loadEnvConfig } from "@next/env"
+import { createClient } from "@supabase/supabase-js"
+import fs from "fs"
+import { Configuration, OpenAIApi } from "openai"
 
-loadEnvConfig("");
+loadEnvConfig("")
 
 const generateEmbeddings = async (essays: PGEssay[]) => {
   const configuration = new Configuration({
     apiKey: process.env.OPENAI_API_KEY,
-  });
-  const openai = new OpenAIApi(configuration);
+  })
+  const openai = new OpenAIApi(configuration)
 
-  const supabase = createClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.SUPABASE_SERVICE_ROLE_KEY!
-  );
+  const supabaseUrl: string | undefined = process.env.NEXT_PUBLIC_SUPABASE_URL
+  const supabaseKey: string | undefined =
+    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
+
+  if (!supabaseUrl || !supabaseKey) {
+    throw new Error("Missing Supabase URL or Key")
+  }
+
+  const supabase = createClient(supabaseUrl, supabaseKey)
 
   for (let i = 0; i < essays.length; i++) {
-    const section = essays[i];
+    const section = essays[i]
 
     for (let j = 0; j < section.chunks.length; j++) {
-      const chunk = section.chunks[j];
+      const chunk = section.chunks[j]
 
       const {
         essay_title,
@@ -31,17 +36,17 @@ const generateEmbeddings = async (essays: PGEssay[]) => {
         content,
         content_length,
         content_tokens,
-      } = chunk;
+      } = chunk
 
       const embeddingResponse = await openai.createEmbedding({
         model: "text-embedding-ada-002",
         input: content,
-      });
+      })
 
-      const [{ embedding }] = embeddingResponse.data.data;
+      const [{ embedding }] = embeddingResponse.data.data
 
       const { data, error } = await supabase
-        .from("pg")
+        .from("pg2")
         .insert({
           essay_title,
           essay_url,
@@ -52,21 +57,21 @@ const generateEmbeddings = async (essays: PGEssay[]) => {
           content_tokens,
           embedding,
         })
-        .select("*");
+        .select("*")
 
       if (error) {
-        console.log("error", error);
+        console.log("error", error)
       } else {
-        console.log("saved", i, j);
+        console.log("saved", i, j)
       }
 
-      await new Promise((resolve) => setTimeout(resolve, 200));
+      await new Promise((resolve) => setTimeout(resolve, 200))
     }
   }
-};
+}
 
-(async () => {
-  const book: PGJSON = JSON.parse(fs.readFileSync("scripts/pg.json", "utf8"));
+;(async () => {
+  const book: PGJSON = JSON.parse(fs.readFileSync("scripts/pg.json", "utf8"))
 
-  await generateEmbeddings(book.essays);
-})();
+  await generateEmbeddings(book.essays)
+})()
