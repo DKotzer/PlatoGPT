@@ -1,7 +1,7 @@
 
 
 export default async function handler(req, res) {
-    await fetch("/api/testQA", {
+    await fetch("https://plato.dylankotzer.com/api/testQA", {
         method: "POST",
         headers: {
             "Content-Type": "application/json",
